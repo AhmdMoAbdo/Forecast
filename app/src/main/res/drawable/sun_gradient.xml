@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/sun_gradient1"
+        android:duration="2000"/>
+
+    <item android:drawable="@drawable/sun_gradient2"
+        android:duration="3500"/>
+
+</animation-list>
