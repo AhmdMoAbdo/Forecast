@@ -1,4 +1,4 @@
-package eg.gov.iti.jets.project
+package eg.gov.iti.jets.project.alerts.view
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -11,11 +11,38 @@ import android.net.Uri
 import android.os.Build
 import android.os.Vibrator
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.common.api.Api
+import eg.gov.iti.jets.project.R
+import eg.gov.iti.jets.project.currentLocation.viewModel.CurrentLocationViewModel
+import eg.gov.iti.jets.project.currentLocation.viewModel.CurrentLocationViewModelFactory
+import eg.gov.iti.jets.project.database.ConcreteLocalSource
+import eg.gov.iti.jets.project.model.Repository
+import eg.gov.iti.jets.project.network.ApiClient
+import eg.gov.iti.jets.project.network.RemoteSource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.runBlocking
 
 
 class AlertReceiver : BroadcastReceiver() {
 
+    lateinit var currentLocationViewModel: CurrentLocationViewModel
+    lateinit var currentLocationViewModelFactory: CurrentLocationViewModelFactory
+
     override fun onReceive(context: Context, intent: Intent) {
+
+        var lat = intent.extras?.getString("lat")
+        var lon = intent.extras?.getString("lon")
+        println("+++++++++++++++++++++++++++$lat, ////  $lon")
+        runBlocking {
+            Repository.getInstance(ApiClient.getInstance(),ConcreteLocalSource(context)).getLocationWeather(lat!!,lon!!,"en").collect(){
+                if (it.alerts==null)println("NONE+++++++++++++++++++++++++++++++++++++++++++++++++++")
+            }
+        }
+
 
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE)as NotificationManager
         if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
@@ -42,4 +69,5 @@ class AlertReceiver : BroadcastReceiver() {
         val ringtone: Ringtone = RingtoneManager.getRingtone(context, alarmUri)
         ringtone.play()
     }
+
 }

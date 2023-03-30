@@ -16,16 +16,15 @@ class Setup {
 
     companion object{
 
-        public final const val apiKey = "353e9f9e5836cd2d31eafe8c6be06294"
-        public final const val imageURL = "https://openweathermap.org/img/wn/"
-        public final const val FavToHomeSharedPref = "FavToHome"
-        public final const val HomeLocationSharedPref = "HomeLocation"
-        public final const val SettingsSharedPref = "Settings"
-        public final const val SettingsSharedPrefAlerts = "alerts"
-        public final const val SettingsSharedPrefLanguage = "language"
-        public final const val SettingsSharedPrefTemp = "temp"
-        public final const val SettingsSharedPrefSpeed = "speed"
-        public final const val SettingsSharedPrefMapping = "mapping"
+          const val apiKey = "353e9f9e5836cd2d31eafe8c6be06294"
+          const val FavToHomeSharedPref = "FavToHome"
+          const val HomeLocationSharedPref = "HomeLocation"
+          const val SettingsSharedPref = "Settings"
+          const val SettingsSharedPrefAlerts = "alerts"
+          const val SettingsSharedPrefLanguage = "language"
+          const val SettingsSharedPrefTemp = "temp"
+          const val SettingsSharedPrefSpeed = "speed"
+          const val SettingsSharedPrefMapping = "mapping"
 
         fun checkForInternet(context: Context): Boolean {
             val connectivityManager =
@@ -70,7 +69,7 @@ class Setup {
 
         //prepare array list for the hour adapter from API Root
         fun getHour(root: Root): List<Hour> {
-            var arr = mutableListOf<Hour>()
+            val arr = mutableListOf<Hour>()
             for (i in 0..24) {
                 val long = (root.hourly[i].dt + root.timezone_offset - 7200).toLong() * 1000
                 val date = Date(long).toString()
@@ -99,7 +98,7 @@ class Setup {
 
         //prepare array list for the Day adapter from API Root
         fun getDay(root: Root,context: Context): List<Day> {
-            var arr = mutableListOf<Day>()
+            val arr = mutableListOf<Day>()
             for (i in 1 until root.daily.size) {
                 val long = root.daily[i].dt.toLong() * 1000
                 val date = Date(long).toString()

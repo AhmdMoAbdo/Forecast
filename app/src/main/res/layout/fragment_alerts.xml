@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/three_layer_gradient"
 
-    tools:context=".Alerts">
+    tools:context=".alerts.view.Alerts">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/alertLottie"
@@ -44,6 +44,50 @@
         app:layout_constraintBottom_toBottomOf="@+id/textAlertHeader"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textAlertHeader" />
+
+    <ImageView
+        android:id="@+id/noAlertsImg"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias=".45"
+        android:src="@drawable/outlined_alert"/>
+
+    <TextView
+        android:id="@+id/noAlertsText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/noAlertsImg"
+        app:layout_constraintStart_toStartOf="@+id/noAlertsImg"
+        app:layout_constraintEnd_toEndOf="@+id/noAlertsImg"
+        android:textSize="30sp"
+        android:fontFamily="@font/alumni"
+        android:text="No Saved Alerts"
+        android:gravity="center"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textAlertHeader">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/alertsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="false"
+            android:orientation="vertical"
+            android:paddingBottom="80dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/saved_location_item" />
+
+    </androidx.core.widget.NestedScrollView>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

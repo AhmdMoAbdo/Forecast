@@ -40,4 +40,16 @@ class Repository(private var remoteSource: RemoteSource, private var localSource
     override suspend fun deleteLocationFromRepo(savedLocation: SavedLocation) {
         return localSource.deleteLocation(savedLocation)
     }
+
+    override fun getDBAlertsFromRepo(): Flow<List<DBAlerts>> {
+        return localSource.getDBAlerts()
+    }
+
+    override fun insertNewAlertLocationThroughRepo(dbAlerts: DBAlerts): Long {
+        return localSource.insertNewAlertLocation(dbAlerts)
+    }
+
+    override fun deleteAlertThroughRepo(dbAlerts: DBAlerts) {
+        localSource.deleteAlert(dbAlerts)
+    }
 }

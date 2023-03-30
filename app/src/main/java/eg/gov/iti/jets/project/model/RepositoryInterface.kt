@@ -12,4 +12,8 @@ interface RepositoryInterface {
     fun getSavedLocationsFromRepo():Flow<List<SavedLocation>>
     suspend fun insertLocationFromRepo(savedLocation: SavedLocation):Long
     suspend fun deleteLocationFromRepo(savedLocation: SavedLocation)
+
+    fun getDBAlertsFromRepo():Flow<List<DBAlerts>>
+    fun insertNewAlertLocationThroughRepo(dbAlerts: DBAlerts):Long
+    fun deleteAlertThroughRepo(dbAlerts: DBAlerts)
 }

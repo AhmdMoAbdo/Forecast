@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/alert"
-        android:name="eg.gov.iti.jets.project.Alerts"
+        android:name="eg.gov.iti.jets.project.alerts.view.Alerts"
         android:label="fragment_alerts"
         tools:layout="@layout/fragment_alerts" >
         <action

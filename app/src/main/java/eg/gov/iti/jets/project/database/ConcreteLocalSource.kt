@@ -32,4 +32,16 @@ class ConcreteLocalSource(context: Context):LocalSource {
     override suspend fun deleteLocation(savedLocation: SavedLocation) {
         return rootDao.deleteLocation(savedLocation)
     }
+
+    override fun getDBAlerts(): Flow<List<DBAlerts>> {
+        return rootDao.getDBAlerts()
+    }
+
+    override fun insertNewAlertLocation(dbAlerts: DBAlerts): Long {
+        return rootDao.insertNewAlertLocation(dbAlerts)
+    }
+
+    override fun deleteAlert(dbAlerts: DBAlerts) {
+        rootDao.deleteAlert(dbAlerts)
+    }
 }

@@ -131,4 +131,13 @@ data class SavedLocation(
     var lon:String
 )
 
+@Entity(tableName = "DBAlerts")
+data class DBAlerts(
+    @PrimaryKey
+    var id:Long,
+    var country:String,
+    var date:String,
+    var time:String
+)
+
 
