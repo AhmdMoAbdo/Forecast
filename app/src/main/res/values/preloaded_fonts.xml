@@ -6,5 +6,7 @@
         <item>@font/alex_brush</item>
         <item>@font/almendra_display</item>
         <item>@font/calistoga</item>
+        <item>@font/poppins</item>
+        <item>@font/poppins_bold</item>
     </array>
 </resources>

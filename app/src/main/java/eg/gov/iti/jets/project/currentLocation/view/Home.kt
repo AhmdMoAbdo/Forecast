@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import eg.gov.iti.jets.project.currentLocation.viewModel.CurrentLocationViewModel
@@ -42,7 +43,10 @@ class Home : Fragment() {
     private lateinit var language: String
     private lateinit var speed: String
     private lateinit var temp: String
+    private lateinit var loc:String
     private var saveToDB:Boolean = true
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +59,6 @@ class Home : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         saveToDB = true
         binding.mainWeatherCard.setOnClickListener { animateWeatherCard() }
         binding.lottieMain.setAnimation("snow.json")
@@ -63,6 +66,12 @@ class Home : Fragment() {
         binding.imgSettings.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.settings)
         }
+        settingsPref = requireContext().getSharedPreferences(Setup.SettingsSharedPref, Context.MODE_PRIVATE)
+        language = settingsPref.getString(Setup.SettingsSharedPrefLanguage, "en")!!
+        speed = settingsPref.getString(Setup.SettingsSharedPrefSpeed, "N/A")!!
+        temp = settingsPref.getString(Setup.SettingsSharedPrefTemp, "N/A")!!
+        loc = settingsPref.getString(Setup.SettingsSharedPrefMapping,"gps")!!
+
         var pref: SharedPreferences
         var lat:String
         var lon:String
@@ -75,16 +84,17 @@ class Home : Fragment() {
             val editor = pref.edit()
             saveToDB=false
             editor.putString("if","M")
-            editor.commit()
+            editor.apply()
         }else{
-            pref = requireContext().getSharedPreferences(Setup.HomeLocationSharedPref, Context.MODE_PRIVATE)
+            pref = if(loc == "gps") {
+                requireContext().getSharedPreferences(Setup.HomeLocationSharedPref, Context.MODE_PRIVATE)
+            }else{
+                requireContext().getSharedPreferences("MapLocation",Context.MODE_PRIVATE)
+            }
             lat = pref.getString("lat", "33.44")!!
             lon = pref.getString("lon", "-94.04")!!
         }
-        settingsPref = requireContext().getSharedPreferences(Setup.SettingsSharedPref, Context.MODE_PRIVATE)
-        language = settingsPref.getString(Setup.SettingsSharedPrefLanguage, "en")!!
-        speed = settingsPref.getString(Setup.SettingsSharedPrefSpeed, "N/A")!!
-        temp = settingsPref.getString(Setup.SettingsSharedPrefTemp, "N/A")!!
+
         geocoder = Geocoder(requireContext(), Locale(language))
 
         viewModelFactory = CurrentLocationViewModelFactory(
@@ -93,6 +103,10 @@ class Home : Fragment() {
                 ConcreteLocalSource(requireContext())
             ))
         viewModel = ViewModelProvider(this, viewModelFactory)[CurrentLocationViewModel::class.java]
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        if(loc=="gps") {
+            Setup.getLastLocation(requireContext())
+        }
         if (Setup.checkForInternet(requireContext())) {
             viewModel.getLocation(lat,lon,language)
 
@@ -183,8 +197,13 @@ class Home : Fragment() {
     private fun setUIData(root: Root) {
         animateWeatherCard()
         // animateScroll()
-        val list = geocoder.getFromLocation(root.lat, root.lon, 3) as MutableList<Address>
-        val address = list[0].adminArea.toString() + ", " + list[0].countryName.toString()
+        var address:String
+        try {
+            val list = geocoder.getFromLocation(root.lat, root.lon, 3) as MutableList<Address>
+             address = list[0].adminArea.toString() + ", " + list[0].countryName.toString()
+        }catch (e:java.lang.Exception){
+             address = "Ahmed"
+        }
         binding.txtCountryName.text = address
         binding.txtDateAndTime.text = viewModel.setTime(root.current.dt + root.timezone_offset - 7200, 'F')
 
@@ -244,11 +263,21 @@ class Home : Fragment() {
         Handler().postDelayed({ animationDrawable.stop() }, 3000)
     }
 
+    override fun onStop() {
+        super.onStop()
+        Setup.mFusedLocationClient.removeLocationUpdates(Setup.CallBack.getInstance(requireContext()))
+    }
+
     private fun animateScroll() {
         binding.homeConstraint.setBackgroundResource(R.drawable.sun_gradient)
         val animationDrawable = binding.homeConstraint.background as AnimationDrawable
         animationDrawable.setEnterFadeDuration(2500)
         animationDrawable.setExitFadeDuration(1000)
         animationDrawable.start()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(loc=="gps") {Setup.getLastLocation(requireContext())}
     }
 }

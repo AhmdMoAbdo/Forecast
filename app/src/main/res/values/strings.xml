@@ -44,6 +44,23 @@
     <string name="sunriseTime">4:45Am</string>
     <string name="country">London,UK</string>
     <string name="Date">18,Mar,2023/ 12:30PM</string>
+
+    <string name="header1">Daily &amp; Hourly Forecast</string>
+    <string name="header2">Around the World </string>
+    <string name="header3">Get Disasters Alarms</string>
+    <string name="header4">Let’s Get Started</string>
+    <string name="body1">Around the clock daily live Temperature, humidity, cloud, visibility and much more updates  </string>
+    <string name="body2">Save any location all around the world and stay updated with the weather conditions around the clock</string>
+    <string name="body3">Get alarmed about any serious weather conditions happening in any country of choice at the time of your choice</string>
+    <string name="body4">Now Let’s get your initial settings ready to start the application</string>
+
+    <string name="preferredTemp">Preferred Temperature Unit</string>
+    <string name="preferredLocation">Location Method</string>
+    <string name="preferredLanguage">Preferred Language</string>
+    <string name="preferredWindUnit">Preferred Speed Unit</string>
+    <string name="preferredAlert">Alerts Method</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -38,7 +38,16 @@ class MapFragment : Fragment() {
         binding.MapFAB.visibility = View.GONE
 
         binding.mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS)
-        val pref:SharedPreferences = requireContext().getSharedPreferences(Setup.HomeLocationSharedPref,Context.MODE_PRIVATE)
+        val settingsPref: SharedPreferences = requireContext().getSharedPreferences(Setup.SettingsSharedPref, Context.MODE_PRIVATE)
+        val pref:SharedPreferences = if(settingsPref.getString(Setup.SettingsSharedPrefMapping,"gps")=="gps"){
+            requireContext().getSharedPreferences(
+                Setup.HomeLocationSharedPref,
+                Context.MODE_PRIVATE)
+        }else{
+            requireContext().getSharedPreferences(
+                "MapLocation",
+                Context.MODE_PRIVATE)
+        }
         val initialCamera = CameraOptions.Builder()
             .center(Point.fromLngLat(pref.getString("lon","-94.04")!!.toDouble(),pref.getString("lat","33.44")!!.toDouble()))
             .zoom(6.5)

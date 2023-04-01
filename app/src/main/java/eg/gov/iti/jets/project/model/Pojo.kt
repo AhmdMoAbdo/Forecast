@@ -140,4 +140,10 @@ data class DBAlerts(
     var time:String
 )
 
+data class Pager(
+    var title:String,
+    var description: String,
+    var image:Int
+)
+
 

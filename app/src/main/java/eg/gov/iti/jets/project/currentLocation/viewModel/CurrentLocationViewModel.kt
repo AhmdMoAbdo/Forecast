@@ -15,6 +15,8 @@ import java.util.*
 
 class CurrentLocationViewModel(private val repo: RepositoryInterface) : ViewModel() {
 
+
+
     private var _location= MutableStateFlow<ApiState>(ApiState.Loading)
     val location= _location.asStateFlow()
 
@@ -47,8 +49,6 @@ class CurrentLocationViewModel(private val repo: RepositoryInterface) : ViewMode
             repo.insertHomeDataFromRepo(root)
         }
     }
-
-
      fun setTime(timestamp: Int, required: Char): String {
         val long = timestamp.toLong() * 1000
         val date = Date(long).toString()
@@ -86,5 +86,4 @@ class CurrentLocationViewModel(private val repo: RepositoryInterface) : ViewMode
         }
         return nextStop
     }
-
 }

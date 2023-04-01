@@ -81,10 +81,13 @@ class Alerts : Fragment() {
         alertsViewModel.dbAlerts.observe(viewLifecycleOwner){ dbAlerts ->
             checkSizeAndShowOrHideImages(dbAlerts.size)
             for (i in dbAlerts){
-                if(shouldBeDeleted(i.date,i.time)) alertsViewModel.deleteAlert(i)
+                if(shouldBeDeleted(i.date,i.time)) {
+                    alertsViewModel.deleteAlert(i)
+                    cancelAlarm(i.id.toInt())
+                }
                 checkSizeAndShowOrHideImages(dbAlerts.size)
             }
-            nextRequestId = dbAlerts.size
+        //    nextRequestId = dbAlerts.size
             alertsAdapter = AlertsAdapter(dbAlerts){
                 showAlert(it)
                 checkSizeAndShowOrHideImages(dbAlerts.size)
@@ -132,6 +135,7 @@ class Alerts : Fragment() {
             checkSizeAndShowOrHideImages(1)
             val pendingIntent = PendingIntent.getBroadcast(requireContext(), nextRequestId, intent, PendingIntent.FLAG_IMMUTABLE)
             alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, c.timeInMillis, pendingIntent)
+            nextRequestId++
         }
 
         binding.closeMapImg.setOnClickListener{
@@ -144,10 +148,16 @@ class Alerts : Fragment() {
         binding.alertMapFAB.visibility = View.GONE
         binding.alertMapView.annotations.cleanup()
         binding.alertMapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS)
-        val pref: SharedPreferences = requireContext().getSharedPreferences(
-            Setup.HomeLocationSharedPref,
-            Context.MODE_PRIVATE
-        )
+        val settingsPref: SharedPreferences = requireContext().getSharedPreferences(Setup.SettingsSharedPref, Context.MODE_PRIVATE)
+        val pref:SharedPreferences = if(settingsPref.getString(Setup.SettingsSharedPrefMapping,"gps")=="gps"){
+            requireContext().getSharedPreferences(
+                Setup.HomeLocationSharedPref,
+                Context.MODE_PRIVATE)
+        }else{
+            requireContext().getSharedPreferences(
+                "MapLocation",
+                Context.MODE_PRIVATE)
+        }
         val initialCamera = CameraOptions.Builder()
             .center(
                 Point.fromLngLat(
