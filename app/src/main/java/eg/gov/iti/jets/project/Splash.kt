@@ -7,10 +7,12 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Geocoder
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.gms.location.*
@@ -250,12 +252,22 @@ class Splash : AppCompatActivity() {
                         editor.putString(Setup.SettingsSharedPrefAlerts,"alarms")
                         editor.apply()
                         step++
+                        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                        requestPermissions(
+                            arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                            1)
+                        }
                         showSettingsDialog()
                     }
                     dialogCard.secondRadio.id -> {
                         editor.putString(Setup.SettingsSharedPrefAlerts,"notifications")
                         editor.apply()
                         step++
+                        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                            requestPermissions(
+                                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                                1)
+                        }
                         showSettingsDialog()
                     }else ->{
                          Toast.makeText(this,"Pick an alert system to continue",Toast.LENGTH_LONG).show()

@@ -19,6 +19,7 @@ import eg.gov.iti.jets.project.database.ConcreteLocalSource
 import eg.gov.iti.jets.project.model.Repository
 import eg.gov.iti.jets.project.model.Setup
 import eg.gov.iti.jets.project.network.ApiClient
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
 
@@ -39,7 +40,7 @@ class AlertReceiver : BroadcastReceiver() {
         }catch (e:java.lang.Exception){
             address = "$lat , $lon"
         }
-        runBlocking {
+        runBlocking(Dispatchers.IO) {
             Repository.getInstance(ApiClient.getInstance(),ConcreteLocalSource(context)).getLocationWeather(lat!!,lon!!,"en").collect(){
                 if (it.alerts==null) {
                     name = "All Safe"
