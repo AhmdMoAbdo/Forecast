@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
@@ -218,6 +219,14 @@ class Setup {
                 ),
                 PERMISSION_ID
             )
+        }
+        fun setLocale(context: Context, lang:String)
+        {
+            val locale = Locale(lang)
+            Locale.setDefault(locale)
+            val config = Configuration()
+            config.setLocale(locale)
+            context.resources.updateConfiguration(config,context.resources.displayMetrics)
         }
     }
     class CallBack(var context: Context): LocationCallback(){

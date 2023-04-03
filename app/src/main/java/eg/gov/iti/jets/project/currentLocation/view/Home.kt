@@ -197,12 +197,11 @@ class Home : Fragment() {
     private fun setUIData(root: Root) {
         animateWeatherCard()
         // animateScroll()
-        var address:String
-        try {
+        val address:String = try {
             val list = geocoder.getFromLocation(root.lat, root.lon, 3) as MutableList<Address>
-             address = list[0].adminArea.toString() + ", " + list[0].countryName.toString()
+            list[0].adminArea.toString() + ", " + list[0].countryName.toString()
         }catch (e:java.lang.Exception){
-             address = "${root.lat} , ${root.lon}"
+            "${root.lat} , ${root.lon}"
         }
         binding.txtCountryName.text = address
         binding.txtDateAndTime.text = viewModel.setTime(root.current.dt + root.timezone_offset - 7200, 'F')

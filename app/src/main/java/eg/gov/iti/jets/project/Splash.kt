@@ -56,6 +56,7 @@ class Splash : AppCompatActivity() {
         pref = this.getSharedPreferences(Setup.SettingsSharedPref, Context.MODE_PRIVATE)
         editor = pref.edit()
         if(pref.getString("goToSecondPage","false")=="True"){
+            Setup.setLocale(this,pref.getString(Setup.SettingsSharedPrefLanguage,"en")!!)
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
@@ -131,7 +132,6 @@ class Splash : AppCompatActivity() {
             dialogCard.back.visibility = View.VISIBLE
             dialogCard.thirdRadio.visibility = View.GONE
         }
-        dialog.setCanceledOnTouchOutside(true)
         dialog.setCancelable(true)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
@@ -277,6 +277,7 @@ class Splash : AppCompatActivity() {
             5 -> {
                 when (dialogCard.radioGroup.checkedRadioButtonId) {
                     dialogCard.firstRadio.id -> {
+                        Setup.setLocale(this,"en")
                         editor.putString(Setup.SettingsSharedPrefLanguage,"en")
                         editor.apply()
                         editor.putString("goToSecondPage","True")
@@ -285,6 +286,8 @@ class Splash : AppCompatActivity() {
                         startActivity(intent)
                     }
                     dialogCard.secondRadio.id -> {
+                        Setup.setLocale(this,"ar")
+                        recreate()
                         editor.putString(Setup.SettingsSharedPrefLanguage,"ar")
                         editor.apply()
                         editor.putString("goToSecondPage","True")

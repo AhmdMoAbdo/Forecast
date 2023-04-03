@@ -3,10 +3,10 @@ package eg.gov.iti.jets.project.settings.view
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.google.android.gms.location.*
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
@@ -17,8 +17,8 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.gestures.addOnMapLongClickListener
 import eg.gov.iti.jets.project.R
-import eg.gov.iti.jets.project.model.Setup
 import eg.gov.iti.jets.project.databinding.FragmentSettingsBinding
+import eg.gov.iti.jets.project.model.Setup
 
 
 class Settings : Fragment() {
@@ -127,6 +127,8 @@ class Settings : Fragment() {
             editor.putString(Setup.SettingsSharedPrefTemp,temperatureSetting)
             editor.putString(Setup.SettingsSharedPrefAlerts,alertType)
             editor.apply()
+            Setup.setLocale(requireContext(),languageType)
+            requireActivity().recreate()
             binding.settingsFAB.visibility = View.GONE
         }
 
@@ -159,7 +161,9 @@ class Settings : Fragment() {
             binding.alertMapFAB.visibility = View.VISIBLE
             true
         }
-
+        binding.settingsLottie.setOnClickListener {
+            binding.settingsLottie.animate()
+        }
     }
 
     private fun setupRadioButtons() {
@@ -262,7 +266,7 @@ class Settings : Fragment() {
             R.drawable.red_marker
         )?.let {
             val annotationApi = binding.alertMapView.annotations
-            val pointAnnotationManager = annotationApi.createPointAnnotationManager(binding.alertMapView)
+            val pointAnnotationManager = annotationApi.createPointAnnotationManager()
             val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
                 .withPoint(point)
                 .withIconImage(it)

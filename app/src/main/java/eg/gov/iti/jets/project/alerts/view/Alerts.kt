@@ -35,7 +35,6 @@ import eg.gov.iti.jets.project.databinding.FragmentAlertsBinding
 import eg.gov.iti.jets.project.model.DBAlerts
 import eg.gov.iti.jets.project.model.Repository
 import eg.gov.iti.jets.project.network.ApiClient
-import eg.gov.iti.jets.project.network.RemoteSource
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -92,7 +91,6 @@ class Alerts : Fragment() {
                 }
                 checkSizeAndShowOrHideImages(dbAlerts.size)
             }
-        //    nextRequestId = dbAlerts.size
             alertsAdapter = AlertsAdapter(dbAlerts){
                 showAlert(it)
                 checkSizeAndShowOrHideImages(dbAlerts.size)
@@ -143,11 +141,15 @@ class Alerts : Fragment() {
             intent.putExtra("lon",myPoint.longitude().toString())
             intent.putExtra("id",nextRequestId.toString())
             val pendingIntent = PendingIntent.getBroadcast(requireContext(), nextRequestId, intent, PendingIntent.FLAG_IMMUTABLE)
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, c.timeInMillis, pendingIntent)
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.timeInMillis, pendingIntent)
         }
 
         binding.closeMapImg.setOnClickListener{
             binding.alertMapCard.visibility = View.GONE
+        }
+
+        binding.alertLottie.setOnClickListener {
+            binding.alertLottie.animate()
         }
     }
 
@@ -177,7 +179,6 @@ class Alerts : Fragment() {
             .build()
         mapbox.setCamera(initialCamera)
     }
-
 
     private fun addAnnotationToMap(point: Point) {
         Setup.bitmapFromDrawableRes(

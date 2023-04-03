@@ -12,7 +12,7 @@ import eg.gov.iti.jets.project.databinding.DailyListItemBinding
 
 class DailyAdapter(private val days:List<Day>,var context: Context):RecyclerView.Adapter<DailyAdapter.ViewHolder>() {
     private lateinit var binding: DailyListItemBinding
-    lateinit var settingsPref: SharedPreferences
+    private lateinit var settingsPref: SharedPreferences
     lateinit var temp:String
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -44,7 +44,7 @@ class DailyAdapter(private val days:List<Day>,var context: Context):RecyclerView
         holder.binding.dayName.text = days[position].name
         holder.binding.skyState.text = days[position].skyState
         holder.binding.txtDegree.text = tempText
-        var image = Setup.getImage(days[position].icon)
+        val image = Setup.getImage(days[position].icon)
         Picasso.get().load(image).into(holder.binding.imgWeather)
     }
 
