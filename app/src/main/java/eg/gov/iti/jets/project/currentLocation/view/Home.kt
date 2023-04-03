@@ -202,7 +202,7 @@ class Home : Fragment() {
             val list = geocoder.getFromLocation(root.lat, root.lon, 3) as MutableList<Address>
              address = list[0].adminArea.toString() + ", " + list[0].countryName.toString()
         }catch (e:java.lang.Exception){
-             address = "Ahmed"
+             address = "${root.lat} , ${root.lon}"
         }
         binding.txtCountryName.text = address
         binding.txtDateAndTime.text = viewModel.setTime(root.current.dt + root.timezone_offset - 7200, 'F')

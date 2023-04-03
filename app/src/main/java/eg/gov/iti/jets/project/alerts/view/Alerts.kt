@@ -4,6 +4,7 @@ import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Address
@@ -48,7 +49,8 @@ class Alerts : Fragment() {
     private lateinit var alertsViewModel: AlertsViewModel
     private lateinit var alertsViewModelFactory: AlertsViewModelFactory
     private lateinit var alertsAdapter: AlertsAdapter
-    private var nextRequestId:Int = 0
+    private lateinit var requestIdPref:SharedPreferences
+    private lateinit var editor: Editor
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,6 +62,9 @@ class Alerts : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        requestIdPref = requireContext().getSharedPreferences("RequestID",Context.MODE_PRIVATE)
+        editor = requestIdPref.edit()
         geocoder = Geocoder(requireContext())
         val mapbox = binding.alertMapView.getMapboxMap()
         binding.alertMapCard.visibility = View.GONE
@@ -121,21 +126,24 @@ class Alerts : Fragment() {
 
         binding.alertMapFAB.setOnClickListener {
             binding.alertMapCard.visibility = View.GONE
-            val alarmManager = requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val intent = Intent(requireContext(), AlertReceiver::class.java)
-            intent.putExtra("lat",myPoint.latitude().toString())
-            intent.putExtra("lon",myPoint.longitude().toString())
             val list = geocoder.getFromLocation(myPoint.latitude(), myPoint.longitude(), 3) as MutableList<Address>
             val address = list[0].adminArea.toString() + ", " + list[0].countryName.toString()
             val date:String = getDate(c)
             val time:String = getTime(c)
+            var nextRequestId = requestIdPref.getString("ID","0")!!.toInt()
             nextRequestId++
             val dbAlert = DBAlerts(nextRequestId.toLong(),address,date,time)
+            editor.putString("ID",nextRequestId.toString())
+            editor.apply()
             alertsViewModel.insertAlert(dbAlert)
             checkSizeAndShowOrHideImages(1)
+            val alarmManager = requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val intent = Intent(requireContext(), AlertReceiver::class.java)
+            intent.putExtra("lat",myPoint.latitude().toString())
+            intent.putExtra("lon",myPoint.longitude().toString())
+            intent.putExtra("id",nextRequestId.toString())
             val pendingIntent = PendingIntent.getBroadcast(requireContext(), nextRequestId, intent, PendingIntent.FLAG_IMMUTABLE)
-            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, c.timeInMillis, pendingIntent)
-            nextRequestId++
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, c.timeInMillis, pendingIntent)
         }
 
         binding.closeMapImg.setOnClickListener{
@@ -234,21 +242,24 @@ class Alerts : Fragment() {
         val amOrPm = timeArr[1].takeLastWhile { it.isLetter() }
         val minuteString =  timeArr[1].takeWhile { !it.isLetter() }
         val minuteNumber = minuteString.toInt()
-        if(amOrPm[0]=='P'){hourNumber+=12}
+        if(amOrPm[0]=='P'&&hourNumber!=12){hourNumber+=12}
 
         val c : Calendar = Calendar.getInstance()
-        if(yearNumber>c.get(Calendar.YEAR))return false
+        return if(yearNumber>c.get(Calendar.YEAR)) false
+        else if(yearNumber<c.get(Calendar.YEAR)) true
         else{
-            if(monthNumber>c.get(Calendar.MONTH))return false
+            if(monthNumber>c.get(Calendar.MONTH)) false
+            else if(monthNumber<c.get(Calendar.MONTH)) true
             else{
-                if(dayNumber>c.get(Calendar.DAY_OF_MONTH))return false
+                if(dayNumber>c.get(Calendar.DAY_OF_MONTH)) false
+                else if(dayNumber<c.get(Calendar.DAY_OF_MONTH)) true
                 else{
-                    if(hourNumber>c.get(Calendar.HOUR_OF_DAY))return false
-                    else if(minuteNumber>=c.get(Calendar.MINUTE))return false
+                    val myTimeInSec = hourNumber*60*60+minuteNumber*60
+                    val actualTimeInSec = c.get(Calendar.HOUR_OF_DAY)*60*60+c.get(Calendar.MINUTE)*60
+                    myTimeInSec < actualTimeInSec
                 }
             }
         }
-        return true
     }
 
     private fun showAlert(dbAlert:DBAlerts){
@@ -268,7 +279,5 @@ class Alerts : Fragment() {
         dialogCard.noButton.setOnClickListener {
             dialog.hide()
         }
-
     }
-
 }

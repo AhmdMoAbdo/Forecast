@@ -27,7 +27,7 @@ data class Current(
     var visibility: Int,
     var wind_speed: Double,
     var wind_deg: Int,
-    var weather: ArrayList<Weather>
+    var weather: List<Weather>
 )
 
 data class Daily(
