@@ -54,4 +54,9 @@
     <string name="preferredAlert">طريقة التنبيهات</string>
     <string name="no_saved_alerts">لا تنبيهات مسجله</string>
     <string name="no_saved_locations">لا توجد اماكن مسجله</string>
+    <string name="gpsDenied">استخدام مستشعر تحديد المواقع مرفوض \n برجاء الضغط علي الزر بالاسفل لاعطاء التطبيق الصلاحيات المطلوبه او استخدام الخريطه لتحديد الموقع من خلال الاعدادات</string>
+    <string name="give_permissions">اعطاء الصلاحيات</string>
+    <string name="deleteQuestion">تأكيد الحذف من القائمه</string>
+    <string name="delete">تأكيد</string>
+    <string name="cancel">إالغاء</string>
 </resources>

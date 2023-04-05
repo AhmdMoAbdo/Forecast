@@ -184,7 +184,7 @@ class Setup {
                 requestPermissions(context)
             }
         }
-        private fun checkPermissions(context: Context): Boolean {
+         fun checkPermissions(context: Context): Boolean {
             return ActivityCompat.checkSelfPermission(
                 context,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
@@ -210,7 +210,7 @@ class Setup {
                 mLocationRequest, CallBack.getInstance(context) , Looper.myLooper())
         }
 
-        private fun requestPermissions(context: Context) {
+         fun requestPermissions(context: Context) {
             ActivityCompat.requestPermissions(
                 context as Activity,
                 arrayOf(

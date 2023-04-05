@@ -8,14 +8,13 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Geocoder
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import com.google.android.gms.location.*
+import com.google.android.gms.location.LocationServices
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapboxMap
@@ -59,6 +58,7 @@ class Splash : AppCompatActivity() {
             Setup.setLocale(this,pref.getString(Setup.SettingsSharedPrefLanguage,"en")!!)
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            finish()
         }
         Setup.mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         geoCoder = Geocoder(this)
@@ -132,7 +132,6 @@ class Splash : AppCompatActivity() {
             dialogCard.back.visibility = View.VISIBLE
             dialogCard.thirdRadio.visibility = View.GONE
         }
-        dialog.setCancelable(true)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
         dialogCard.next.setOnClickListener {
@@ -275,6 +274,7 @@ class Splash : AppCompatActivity() {
                 }
             }
             5 -> {
+                Setup.getLastLocation(this)
                 when (dialogCard.radioGroup.checkedRadioButtonId) {
                     dialogCard.firstRadio.id -> {
                         Setup.setLocale(this,"en")
@@ -286,6 +286,7 @@ class Splash : AppCompatActivity() {
                         startActivity(intent)
                     }
                     dialogCard.secondRadio.id -> {
+                        Setup.getLastLocation(this)
                         Setup.setLocale(this,"ar")
                         recreate()
                         editor.putString(Setup.SettingsSharedPrefLanguage,"ar")

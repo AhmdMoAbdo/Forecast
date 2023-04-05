@@ -8,6 +8,43 @@
     android:background="@drawable/three_layer_gradient"
     tools:context=".currentLocation.view.Home">
 
+    <ImageView
+        android:id="@+id/gpsOffImage"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias=".35"
+        android:src="@drawable/gps_off"/>
+
+    <TextView
+        android:id="@+id/gpsOffTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/gpsOffImage"
+        app:layout_constraintStart_toStartOf="@+id/gpsOffImage"
+        app:layout_constraintEnd_toEndOf="@+id/gpsOffImage"
+        android:textSize="25sp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/calistoga"
+        android:text="@string/gpsDenied"
+        android:gravity="center"/>
+
+    <Button
+        android:id="@+id/gpsOffBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/give_permissions"
+        android:background="@drawable/rounded_background"
+        app:layout_constraintTop_toBottomOf="@id/gpsOffTxt"
+        app:layout_constraintStart_toStartOf="@id/gpsOffTxt"
+        app:layout_constraintEnd_toEndOf="@+id/gpsOffTxt"
+        android:layout_marginTop="8dp"/>
+
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +63,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDateAndTime"
         app:lottie_autoPlay="true"
-        app:lottie_fileName="snow.json"
         app:lottie_loop="true"
         app:lottie_speed="1" />
 
@@ -97,6 +133,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtDateAndTime">
+
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/scroll"

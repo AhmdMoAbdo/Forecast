@@ -1,6 +1,8 @@
 package eg.gov.iti.jets.project.settings.view
 
 import android.content.Context
+import android.content.Intent
+import android.content.Intent.getIntent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -33,8 +35,6 @@ class Settings : Fragment() {
     private var speed:String = ""
     private var alertType:String = ""
     private var locationMethod:String = ""
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -119,6 +119,10 @@ class Settings : Fragment() {
         }
 
         binding.settingsFAB.setOnClickListener {
+            var flag = false
+            if(pref.getString(Setup.SettingsSharedPrefLanguage,"none")!=languageType){
+                flag = true
+            }
             if(locationMethod == "gps") Setup.getLastLocation(requireContext())
             else Setup.mFusedLocationClient.removeLocationUpdates(Setup.CallBack.getInstance(requireContext()))
             editor.putString(Setup.SettingsSharedPrefLanguage,languageType)
@@ -127,11 +131,14 @@ class Settings : Fragment() {
             editor.putString(Setup.SettingsSharedPrefTemp,temperatureSetting)
             editor.putString(Setup.SettingsSharedPrefAlerts,alertType)
             editor.apply()
-            Setup.setLocale(requireContext(),languageType)
-            requireActivity().recreate()
+            if(flag) {
+                Setup.setLocale(requireContext(), languageType)
+                val intent = activity?.intent
+                activity?.finish()
+                startActivity(intent)
+            }
             binding.settingsFAB.visibility = View.GONE
         }
-
         setupRadioButtons()
         binding.pickLocationButton.setOnClickListener {
             setupMap(mapbox)

@@ -62,4 +62,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="gpsDenied">GPS Permission Denied\nClick the button to allow the app to use GPS or choose location through the Map in the settings</string>
+    <string name="give_permissions">Give Permissions</string>
+    <string name="deleteQuestion">Are you sure you want to delete this item?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
 </resources>
