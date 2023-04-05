@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import androidx.navigation.Navigation
 import android.text.format.DateFormat
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapboxMap
@@ -100,19 +101,36 @@ class Alerts : Fragment() {
         }
         val c = Calendar.getInstance()
         binding.alertFAB.setOnClickListener {
-            DatePickerDialog(requireContext(), { _, year, month, dayOfMonth -> c.set(Calendar.YEAR, year)
+            if (Setup.checkForInternet(requireContext())) {
+                DatePickerDialog(
+                    requireContext(),
+                    { _, year, month, dayOfMonth ->
+                        c.set(Calendar.YEAR, year)
 
-                    c.set(Calendar.MONTH, month)
-                    c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                        c.set(Calendar.MONTH, month)
+                        c.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-                    TimePickerDialog(requireContext(), { _, hourOfDay, minute ->
+                        TimePickerDialog(
+                            requireContext(),
+                            { _, hourOfDay, minute ->
 
-                        c.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                        c.set(Calendar.MINUTE, minute)
-                        setupMap(mapbox)
+                                c.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                                c.set(Calendar.MINUTE, minute)
+                                setupMap(mapbox)
 
-                        }, Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE), DateFormat.is24HourFormat(requireContext())).show()
-                }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.DAY_OF_MONTH)).show()
+                            },
+                            Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
+                            Calendar.getInstance().get(Calendar.MINUTE),
+                            DateFormat.is24HourFormat(requireContext())
+                        ).show()
+                    },
+                    Calendar.getInstance().get(Calendar.YEAR),
+                    Calendar.getInstance().get(Calendar.MONTH),
+                    Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+                ).show()
+            }else{
+                Snackbar.make(binding.coordinator, "Connect to the Internet to add an Alert", Snackbar.LENGTH_LONG).show()
+            }
         }
         mapbox.addOnMapLongClickListener { point ->
             myPoint = point

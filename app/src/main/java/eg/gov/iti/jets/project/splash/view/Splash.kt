@@ -1,4 +1,4 @@
-package eg.gov.iti.jets.project
+package eg.gov.iti.jets.project.splash.view
 
 import android.app.Dialog
 import android.content.Context
@@ -23,6 +23,8 @@ import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.gestures.addOnMapLongClickListener
+import eg.gov.iti.jets.project.MainActivity
+import eg.gov.iti.jets.project.R
 import eg.gov.iti.jets.project.databinding.ActivitySplashBinding
 import eg.gov.iti.jets.project.databinding.IntroDialogBinding
 import eg.gov.iti.jets.project.model.Setup

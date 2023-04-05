@@ -47,4 +47,44 @@ class CurrentLocationViewModelTest{
         val result  = viewModel.dbHomeData.getOrAwaitValue { }
         assertEquals(result, root)
     }
+
+    @Test
+    fun setTime_timeStampAndCharFullDate_Date(){
+        //Given a specific TimeStamp
+        val timeStamp = 1646318698
+
+        //when calling the function to get the full date
+        var result = viewModel.setTime(timeStamp,'F')
+
+        //then asserting that the retrieved date is equal to our timeStamp
+        assertEquals("Thu: 03-Mar-2022\n" +
+                "4:44PM",result)
+    }
+
+    @Test
+    fun setTime_timeStampAndCharTime_Time(){
+        //Given a specific TimeStamp
+        val timeStamp = 1646318698
+
+        //when calling the function to get the full date
+        var result = viewModel.setTime(timeStamp,'T')
+
+        //then asserting that the retrieved date is equal to our timeStamp
+        assertEquals("4:44PM",result)
+    }
+
+    @Test
+    fun sunRiseOrSunSet_rootObject_timeOfTheUpcomingEventSunRiseOrSunSet(){
+        //Given a Root Object
+        val root = Root(1, 39.31,-74.5,"America/New_York",-18000,
+            Current(1646318698,1646306882,1646347929,282.21,278.41,1014,65,275.99
+                ,2.55,40,10000,8.75,360, emptyList<Weather>())
+            , emptyList<Hourly>(), emptyList<Daily>(), emptyList<Alert>())
+
+        //when calling the function to get the time of the upcoming event whether it's rise or set
+        var result = viewModel.sunRiseOrSunSet(root)
+
+        //then asserting that the retrieved time is equal to the expected time
+        assertEquals("5:52PM",result)
+    }
 }

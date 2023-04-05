@@ -125,6 +125,7 @@ class Home : Fragment() {
             )
             viewModel =
                 ViewModelProvider(this, viewModelFactory)[CurrentLocationViewModel::class.java]
+            println(viewModel.setTime(1646306882,'T'))
             mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
             if (loc == "gps") {
                 Setup.getLastLocation(requireContext())

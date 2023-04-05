@@ -28,10 +28,12 @@
         <receiver
             android:name=".alerts.view.NotificationReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true">
+
+        </receiver>
 
         <activity
-            android:name=".Splash"
+            android:name=".splash.view.Splash"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -44,7 +46,9 @@
         <receiver
             android:name=".alerts.view.AlertReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true">
+
+        </receiver>
 
         <activity
             android:name=".MainActivity"
