@@ -27,7 +27,7 @@ data class Current(
     var visibility: Int,
     var wind_speed: Double,
     var wind_deg: Int,
-    var weather: ArrayList<Weather>
+    var weather: List<Weather>
 )
 
 data class Daily(
@@ -129,6 +129,21 @@ data class SavedLocation(
     var name:String,
     var lat:String,
     var lon:String
+)
+
+@Entity(tableName = "DBAlerts")
+data class DBAlerts(
+    @PrimaryKey
+    var id:Long,
+    var country:String,
+    var date:String,
+    var time:String
+)
+
+data class Pager(
+    var title:String,
+    var description: String,
+    var image:Int
 )
 
 

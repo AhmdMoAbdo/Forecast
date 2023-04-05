@@ -12,7 +12,7 @@ import eg.gov.iti.jets.project.databinding.HourlyListItemBinding
 
 class HourlyAdapter(private var hours:List<Hour>,var context: Context):RecyclerView.Adapter<HourlyAdapter.ViewHolder>() {
     private lateinit var binding: HourlyListItemBinding
-    lateinit var settingsPref: SharedPreferences
+    private lateinit var settingsPref: SharedPreferences
     lateinit var temp:String
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -38,7 +38,7 @@ class HourlyAdapter(private var hours:List<Hour>,var context: Context):RecyclerV
         }
         holder.binding.hour.text = hours[position].hour
         holder.binding.txtDegree.text = tempText
-        var image = Setup.getImage(hours[position].icon)
+        val image = Setup.getImage(hours[position].icon)
         Picasso.get().load(image).into(holder.binding.weatherIcon)
     }
 

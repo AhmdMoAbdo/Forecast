@@ -6,22 +6,10 @@
     app:startDestination="@id/home">
 
     <fragment
-        android:id="@+id/mapFragment"
-        android:name="eg.gov.iti.jets.project.MapFragment"
-        android:label="fragment_map"
-        tools:layout="@layout/fragment_map" >
-        <action
-            android:id="@+id/action_mapFragment_to_currentLocations"
-            app:destination="@id/currentLocations" />
-    </fragment>
-    <fragment
         android:id="@+id/currentLocations"
         android:name="eg.gov.iti.jets.project.savedLocations.view.SavedLocations"
         android:label="currentLocations"
         tools:layout="@layout/fragment_saved_locations" >
-        <action
-            android:id="@+id/action_currentLocations_to_mapFragment"
-            app:destination="@id/mapFragment" />
         <argument
             android:name="lat"
             app:argType="string" />
@@ -43,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/alert"
-        android:name="eg.gov.iti.jets.project.Alerts"
+        android:name="eg.gov.iti.jets.project.alerts.view.Alerts"
         android:label="fragment_alerts"
         tools:layout="@layout/fragment_alerts" >
         <action
@@ -52,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/settings"
-        android:name="eg.gov.iti.jets.project.Settings"
+        android:name="eg.gov.iti.jets.project.settings.view.Settings"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
         <action

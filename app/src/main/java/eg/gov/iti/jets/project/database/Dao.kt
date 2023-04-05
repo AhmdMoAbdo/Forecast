@@ -20,4 +20,13 @@ interface RootDao{
 
     @Delete
     suspend fun deleteLocation(savedLocation: SavedLocation)
+
+    @Query("Select * From DBAlerts")
+    fun getDBAlerts():Flow<List<DBAlerts>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertNewAlertLocation(dbAlerts: DBAlerts):Long
+
+    @Delete
+    fun deleteAlert(dbAlerts: DBAlerts)
 }

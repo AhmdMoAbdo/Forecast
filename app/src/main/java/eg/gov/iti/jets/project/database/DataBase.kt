@@ -7,11 +7,10 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import eg.gov.iti.jets.project.model.*
 
-@Database(entities = [Root::class, SavedLocation::class], version = 1)
+@Database(entities = [Root::class, SavedLocation::class,DBAlerts::class], version = 1)
 @TypeConverters(DBConverters::class)
 abstract class RootDB : RoomDatabase() {
     abstract fun getHomeData(): RootDao
-
     companion object {
         @Volatile
         private var Instance: RootDB? = null

@@ -2,17 +2,23 @@ package eg.gov.iti.jets.project.currentLocation.view
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
+import android.widget.LinearLayout
+import androidx.core.view.*
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import eg.gov.iti.jets.project.databinding.DailyListItemBinding
 import eg.gov.iti.jets.project.model.Day
 import eg.gov.iti.jets.project.model.Setup
-import eg.gov.iti.jets.project.databinding.DailyListItemBinding
 
 class DailyAdapter(private val days:List<Day>,var context: Context):RecyclerView.Adapter<DailyAdapter.ViewHolder>() {
+
     private lateinit var binding: DailyListItemBinding
-    lateinit var settingsPref: SharedPreferences
+    private lateinit var settingsPref: SharedPreferences
     lateinit var temp:String
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -44,8 +50,9 @@ class DailyAdapter(private val days:List<Day>,var context: Context):RecyclerView
         holder.binding.dayName.text = days[position].name
         holder.binding.skyState.text = days[position].skyState
         holder.binding.txtDegree.text = tempText
-        var image = Setup.getImage(days[position].icon)
+        val image = Setup.getImage(days[position].icon)
         Picasso.get().load(image).into(holder.binding.imgWeather)
+
     }
 
     override fun getItemCount(): Int {
@@ -53,5 +60,4 @@ class DailyAdapter(private val days:List<Day>,var context: Context):RecyclerView
     }
 
     class ViewHolder(var binding: DailyListItemBinding):RecyclerView.ViewHolder(binding.root)
-
 }

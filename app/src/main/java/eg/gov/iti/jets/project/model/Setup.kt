@@ -1,14 +1,29 @@
 package eg.gov.iti.jets.project.model
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.location.Location
+import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.os.Bundle
+import android.os.Looper
+import android.provider.Settings
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.*
 import eg.gov.iti.jets.project.R
 import java.util.*
 
@@ -16,16 +31,18 @@ class Setup {
 
     companion object{
 
-        public final const val apiKey = "353e9f9e5836cd2d31eafe8c6be06294"
-        public final const val imageURL = "https://openweathermap.org/img/wn/"
-        public final const val FavToHomeSharedPref = "FavToHome"
-        public final const val HomeLocationSharedPref = "HomeLocation"
-        public final const val SettingsSharedPref = "Settings"
-        public final const val SettingsSharedPrefAlerts = "alerts"
-        public final const val SettingsSharedPrefLanguage = "language"
-        public final const val SettingsSharedPrefTemp = "temp"
-        public final const val SettingsSharedPrefSpeed = "speed"
-        public final const val SettingsSharedPrefMapping = "mapping"
+        private const val PERMISSION_ID = 5005
+        const val apiKey = "353e9f9e5836cd2d31eafe8c6be06294"
+        const val FavToHomeSharedPref = "FavToHome"
+        const val HomeLocationSharedPref = "HomeLocation"
+        const val SettingsSharedPref = "Settings"
+        const val SettingsSharedPrefAlerts = "alerts"
+        const val SettingsSharedPrefLanguage = "language"
+        const val SettingsSharedPrefTemp = "temp"
+        const val SettingsSharedPrefSpeed = "speed"
+        const val SettingsSharedPrefMapping = "mapping"
+        lateinit var mFusedLocationClient: FusedLocationProviderClient
+
 
         fun checkForInternet(context: Context): Boolean {
             val connectivityManager =
@@ -70,7 +87,7 @@ class Setup {
 
         //prepare array list for the hour adapter from API Root
         fun getHour(root: Root): List<Hour> {
-            var arr = mutableListOf<Hour>()
+            val arr = mutableListOf<Hour>()
             for (i in 0..24) {
                 val long = (root.hourly[i].dt + root.timezone_offset - 7200).toLong() * 1000
                 val date = Date(long).toString()
@@ -99,7 +116,7 @@ class Setup {
 
         //prepare array list for the Day adapter from API Root
         fun getDay(root: Root,context: Context): List<Day> {
-            var arr = mutableListOf<Day>()
+            val arr = mutableListOf<Day>()
             for (i in 1 until root.daily.size) {
                 val long = root.daily[i].dt.toLong() * 1000
                 val date = Date(long).toString()
@@ -153,5 +170,85 @@ class Setup {
                 bitmap
             }
         }
+
+        fun getLastLocation(context: Context) {
+            if (checkPermissions(context)) {
+                if (isLocationEnabled(context)) {
+                    requestNewLocationData(context)
+                } else {
+                    Toast.makeText(context, "Turn on Location", Toast.LENGTH_LONG).show()
+                    val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    ContextCompat.startActivity(context, intent, Bundle.EMPTY)
+                }
+            } else {
+                requestPermissions(context)
+            }
+        }
+         fun checkPermissions(context: Context): Boolean {
+            return ActivityCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED ||
+                    ActivityCompat.checkSelfPermission(
+                        context,
+                        android.Manifest.permission.ACCESS_FINE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED
+        }
+        private fun isLocationEnabled(context: Context): Boolean {
+            val locationManger: LocationManager =
+                context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            return locationManger.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                    locationManger.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        }
+        @SuppressLint("MissingPermission")
+        private fun requestNewLocationData(context: Context) {
+            val mLocationRequest = LocationRequest()
+            mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            mLocationRequest.interval = 0
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+            mFusedLocationClient.requestLocationUpdates(
+                mLocationRequest, CallBack.getInstance(context) , Looper.myLooper())
+        }
+
+         fun requestPermissions(context: Context) {
+            ActivityCompat.requestPermissions(
+                context as Activity,
+                arrayOf(
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ),
+                PERMISSION_ID
+            )
+        }
+        fun setLocale(context: Context, lang:String)
+        {
+            val locale = Locale(lang)
+            Locale.setDefault(locale)
+            val config = Configuration()
+            config.setLocale(locale)
+            context.resources.updateConfiguration(config,context.resources.displayMetrics)
+        }
     }
+    class CallBack(var context: Context): LocationCallback(){
+        companion object{
+            @Volatile
+            private var instance:CallBack? = null
+            fun getInstance(context: Context):CallBack{
+                return instance?: synchronized(this){
+                    val temp = CallBack(context)
+                    instance = temp
+                    temp
+                }
+            }
+        }
+        override fun onLocationResult(locationResult: LocationResult?) {
+            val mLastLocation: Location = locationResult!!.lastLocation
+            val pref: SharedPreferences = context.getSharedPreferences("HomeLocation", Context.MODE_PRIVATE)
+            val editor: SharedPreferences.Editor = pref.edit()
+            editor.putString("lat", mLastLocation.latitude.toString())
+            editor.putString("lon", mLastLocation.longitude.toString())
+            editor.apply()
+        }
+    }
+
 }

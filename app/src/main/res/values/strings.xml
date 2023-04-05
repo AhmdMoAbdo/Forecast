@@ -1,5 +1,5 @@
 <resources>
-    <string name="mapbox_access_token">sk.eyJ1IjoiYWhtZWQzYWJkbyIsImEiOiJjbGZmeGExaHYxMHZtM3puejVvODVlb3RpIn0.appO7ribZPQZivg-7FUvIA</string>
+    <string name="mapbox_access_token" translatable="false">sk.eyJ1IjoiYWhtZWQzYWJkbyIsImEiOiJjbGZmeGExaHYxMHZtM3puejVvODVlb3RpIn0.appO7ribZPQZivg-7FUvIA</string>
     <string name="app_name">Forecast</string>
     <string name="home">Home</string>
     <string name="favourite">Favourites</string>
@@ -12,7 +12,7 @@
     <string name="cel">C</string>
     <string name="sunrise">Sunrise</string>
     <string name="sunset">Sunset</string>
-    <string name="thirteen">13</string>
+    <string name="thirteen" translatable="false">13</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
@@ -40,10 +40,31 @@
     <string name="arabic">العربيه</string>
     <string name="temp">Temperature</string>
     <string name="english">English</string>
-    <string name="time">10Am</string>
-    <string name="sunriseTime">4:45Am</string>
-    <string name="country">London,UK</string>
-    <string name="Date">18,Mar,2023/ 12:30PM</string>
+    <string name="time" translatable="false">10Am</string>
+    <string name="sunriseTime" translatable="false">4:45Am</string>
+    <string name="country" translatable="false">London,UK</string>
+    <string name="Date" translatable="false">18,Mar,2023/ 12:30PM</string>
+    <string name="header1">Daily &amp; Hourly Forecast</string>
+    <string name="header2">Around the World </string>
+    <string name="header3">Get Disasters Alarms</string>
+    <string name="header4">Let’s Get Started</string>
+    <string name="body1">Around the clock daily live Temperature, humidity, cloud, visibility and much more updates  </string>
+    <string name="body2">Save any location all around the world and stay updated with the weather conditions around the clock</string>
+    <string name="body3">Get alarmed about any serious weather conditions happening in any country of choice at the time of your choice</string>
+    <string name="body4">Now Let’s get your initial settings ready to start the application</string>
+    <string name="preferredTemp">Preferred Temperature Unit</string>
+    <string name="preferredLocation">Location Method</string>
+    <string name="preferredLanguage">Preferred Language</string>
+    <string name="preferredWindUnit">Preferred Speed Unit</string>
+    <string name="preferredAlert">Alerts Method</string>
+    <string name="no_saved_alerts">No Saved Alerts</string>
+    <string name="no_saved_locations">No Saved Locations</string>
+
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="gpsDenied">GPS Permission Denied\nClick the button to allow the app to use GPS or choose location through the Map in the settings</string>
+    <string name="give_permissions">Give Permissions</string>
+    <string name="deleteQuestion">Are you sure you want to delete this item?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
 </resources>
